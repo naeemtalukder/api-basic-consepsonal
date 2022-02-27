@@ -1,4 +1,6 @@
 const allPlayers = () => {
+    document.getElementById('player-container').innerHTML = '';
+
     const searchValue = document.getElementById('search-box').value;
     const url = `https://www.thesportsdb.com/api/v1/json/2/searchplayers.php?p=${searchValue}`;
     // console.log(url);
@@ -20,11 +22,33 @@ const showAllPlayers = (players) => {
     <p></p>
     <div class="allBtn">
         <button class="btn btn-danger">Delete</button>
-        <button class="btn btn-success">Detials</button>
+        <button onclick="detials('${player.idPlayer}')" class="btn btn-success">Detials</button>
     </div>
 </div>`
         parent.appendChild(div);
-
+        // console.log(player);
     }
-    // console.log(player);
+};
+const detials = (id) => {
+    const url = `https://www.thesportsdb.com/api/v1/json/2/lookupplayer.php?id=${id}`
+    fetch(url)
+        .then((res) => res.json())
+        .then((data) => setDetials(data.players[0]));
+}
+const setDetials = (info) => {
+    if (info.strGender == "Male") {
+        document.getElementById('male').style.display = 'block';
+        document.getElementById('female').style.display = 'none';
+    }
+    else {
+        document.getElementById('male').style.display = 'none';
+        document.getElementById('female').style.display = 'block';
+    }
+    document.getElementById('detials-container').innerHTML = `
+    <div>
+    <img src="" alt="">
+    <h3>Name: ${info.strPlayer}</h3>
+</div>
+    `
+    console.log(info);
 }
